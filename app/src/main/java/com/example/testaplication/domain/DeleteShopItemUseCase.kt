@@ -1,7 +1,7 @@
 package com.example.testaplication.domain
 
-class DeleteShopItemUseCase {
-    fun deleteThisItem(ShopItem: ShopList){
-
+class DeleteShopItemUseCase(private val shopListRepository: ShopListRepositiry) {
+    fun deleteThisItem(shopItem: ShopList){
+        shopListRepository.deleteThisItem(shopItem)
     }
 }

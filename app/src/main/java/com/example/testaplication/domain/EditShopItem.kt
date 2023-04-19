@@ -1,8 +1,8 @@
 package com.example.testaplication.domain
 
-class EditShopItem {
+class EditShopItem (private val shopListRepository: ShopListRepositiry){
 
-    fun editItem(ShopItem: ShopList){
-
+    fun editItem(shopItem: ShopList){
+        shopListRepository.editItem(shopItem)
     }
 }
