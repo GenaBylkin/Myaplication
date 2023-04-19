@@ -1,8 +1,8 @@
 package com.example.testaplication.domain
 
-class GetShopList {
+class GetShopList (private val shopListRepository: ShopListRepositiry){
 
     fun getShopList():List<ShopList>{
-        TODO()
+        return shopListRepository.getShopList()
     }
 }

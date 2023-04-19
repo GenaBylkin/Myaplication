@@ -1,8 +1,8 @@
 package com.example.testaplication.domain
 
-class AddNewShopListItemUseCase {
+class AddNewShopListItemUseCase(private val shopListRepository: ShopListRepositiry) {
 
-    fun addNewItem(ShopItem:ShopList) {
-
+    fun addNewItem(shopItem:ShopList) {
+        shopListRepository.addNewItem(shopItem)
     }
 }
