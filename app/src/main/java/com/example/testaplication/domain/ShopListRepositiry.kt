@@ -2,11 +2,11 @@ package com.example.testaplication.domain
 
 interface ShopListRepositiry {
 
-    fun addNewItem(ShopItem:ShopList)
+    fun addNewItem(shopItem:ShopList)
 
-    fun deleteThisItem(ShopItem: ShopList)
+    fun deleteThisItem(shopItem: ShopList)
 
-    fun editItem(ShopItem: ShopList)
+    fun editItem(shopItem: ShopList)
 
     fun getShopItem(shopListId: Int):ShopList
 
