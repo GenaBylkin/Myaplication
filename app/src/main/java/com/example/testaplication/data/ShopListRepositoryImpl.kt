@@ -1,21 +1,33 @@
 package com.example.testaplication.data
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.testaplication.domain.ShopList
 import com.example.testaplication.domain.ShopListRepositiry
 
 object ShopListRepositoryImpl: ShopListRepositiry {
 
+    private val shopListItemLD = MutableLiveData<List<ShopList>>()
     private val shopListItem = mutableListOf<ShopList>()
     private var autoID = 0
+
+    init {
+        for (i in 0 until 10){
+            val item = ShopList("Name $i" ,i, true)
+            addNewItem(item)
+        }
+    }
 
     override fun addNewItem(shopItem: ShopList) {
         if (shopItem.id == ShopList.UNDEFINED_ID){
             shopItem.id = autoID++
     }
         shopListItem.add(shopItem)
+        updateList()
     }
 
     override fun deleteThisItem(shopItem: ShopList) {
         shopListItem.remove(shopItem)
+        updateList()
     }
 
     override fun editItem(shopItem: ShopList) {
@@ -29,8 +41,11 @@ object ShopListRepositoryImpl: ShopListRepositiry {
         throw java.lang.RuntimeException("This item $shopListItem don't found")
     }
 
-    override fun getShopList(): List<ShopList> {
-        return shopListItem
+    override fun getShopList(): LiveData<List<ShopList>> {
+        return shopListItemLD
     }
 
+    private fun updateList() {
+        shopListItemLD.value = shopListItem.toList()
+    }
 }
