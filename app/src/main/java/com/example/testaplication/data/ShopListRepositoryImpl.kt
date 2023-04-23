@@ -7,7 +7,7 @@ import com.example.testaplication.domain.ShopListRepositiry
 object ShopListRepositoryImpl: ShopListRepositiry {
 
     private val shopListItemLD = MutableLiveData<List<ShopList>>()
-    private val shopListItem = mutableListOf<ShopList>()
+    private val shopListItem = sortedSetOf<ShopList>({o1,o2 -> o1.id.compareTo(o2.id)})
     private var autoID = 0
 
     init {
