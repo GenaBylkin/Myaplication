@@ -16,21 +16,31 @@ import com.example.testaplication.domain.ShopList
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel:MainViewModel
-    private lateinit var adapter: ShopListAdapter
+    private lateinit var shopListAdapter: ShopListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this){
-            adapter.myList = it
+            shopListAdapter.myList = it
         }
     }
 
 
     private fun setupRecyclerView(){
         val rvShop = findViewById<RecyclerView>(R.id.rv_shop_list)
-        adapter = ShopListAdapter()
-        rvShop.adapter = adapter
+        with(rvShop){
+            shopListAdapter = ShopListAdapter()
+            adapter = shopListAdapter
+            recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.ELEMENT_ENABLED,
+                ShopListAdapter.MAX_POOL_VIEW
+            )
+            recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.ELEMENT_DISABLE,
+                ShopListAdapter.MAX_POOL_VIEW
+            )}
+
     }
 }
