@@ -9,6 +9,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testaplication.R
 import com.example.testaplication.domain.ShopList
@@ -27,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setupRecyclerView(){
         val rvShop = findViewById<RecyclerView>(R.id.rv_shop_list)
         with(rvShop){
@@ -42,5 +42,45 @@ class MainActivity : AppCompatActivity() {
                 ShopListAdapter.MAX_POOL_VIEW
             )}
 
+        setupLongClick()
+
+        setupClick()
+
+        setupSwipe(rvShop)
+    }
+
+    private fun setupSwipe(rvShop:RecyclerView) {
+        val collBack = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = shopListAdapter.myList[viewHolder.adapterPosition]
+                viewModel.deleteItem(item)
+            }
+
+        }
+        val itemTouchHelper = ItemTouchHelper(collBack)
+        itemTouchHelper.attachToRecyclerView(rvShop)
+    }
+
+    private fun setupClick() {
+        shopListAdapter.onClickListener = {
+            Log.d("onClickListener", "This shop item: ${it.name}, ${it.quantity} ")
+        }
+    }
+
+    private fun setupLongClick() {
+        shopListAdapter.onLongClickListener = {
+            viewModel.editThisItem(it)
+        }
     }
 }

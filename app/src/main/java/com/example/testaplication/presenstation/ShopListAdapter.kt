@@ -17,7 +17,8 @@ class ShopListAdapter:RecyclerView.Adapter<ShopListAdapter.shopItemViewHolder>()
         field = value
         notifyDataSetChanged()
     }
-
+    var onLongClickListener:((ShopList) -> Unit)? = null
+    var onClickListener:((ShopList) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): shopItemViewHolder {
         Log.d("ShopListAdapter", "onCreateViewHolder, count: ${++count}")
         val loyout = when(viewType){
@@ -38,13 +39,20 @@ class ShopListAdapter:RecyclerView.Adapter<ShopListAdapter.shopItemViewHolder>()
         holder.tvName.text = gList.name
         holder.tvCount.text = gList.quantity.toString()
         holder.view.setOnLongClickListener {
+            onLongClickListener?.invoke(gList)
             true
         }
+
+        holder.view.setOnClickListener {
+            onClickListener?.invoke(gList)
+            true
+        }
+        
+        //holder.view.
     }
 
     override fun onViewRecycled(holder: shopItemViewHolder) {
         super.onViewRecycled(holder)
-
     }
 
     override fun getItemCount(): Int = myList.size
