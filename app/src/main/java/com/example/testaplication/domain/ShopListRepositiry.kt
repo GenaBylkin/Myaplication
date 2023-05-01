@@ -2,7 +2,7 @@ package com.example.testaplication.domain
 
 import androidx.lifecycle.LiveData
 
-interface ShopListRepositiry {
+interface ShopListRepository {
 
     fun addNewItem(shopItem:ShopList)
 
