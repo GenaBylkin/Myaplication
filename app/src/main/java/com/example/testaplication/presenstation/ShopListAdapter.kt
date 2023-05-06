@@ -1,26 +1,15 @@
 package com.example.testaplication.presenstation
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.testaplication.R
 import com.example.testaplication.domain.ShopList
 
-class ShopListAdapter:RecyclerView.Adapter<ShopListAdapter.shopItemViewHolder>() {
-    var count = 0
-    var myList = listOf<ShopList>()
-    set(value){
-        field = value
-        notifyDataSetChanged()
-    }
+class ShopListAdapter:ListAdapter<ShopList,ShopItemViewHolder>(ShopItemDiffutilCollback()) {
     var onLongClickListener:((ShopList) -> Unit)? = null
     var onClickListener:((ShopList) -> Unit)? = null
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): shopItemViewHolder {
-        Log.d("ShopListAdapter", "onCreateViewHolder, count: ${++count}")
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val loyout = when(viewType){
             ELEMENT_ENABLED -> R.layout.item_shop_enabled
             ELEMENT_DISABLE -> R.layout.item_shop_disable
@@ -31,11 +20,11 @@ class ShopListAdapter:RecyclerView.Adapter<ShopListAdapter.shopItemViewHolder>()
             parent,
             false
         )
-        return shopItemViewHolder(view)
+        return ShopItemViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: shopItemViewHolder, position: Int) {
-        val gList = myList[position]
+    override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
+        val gList = getItem(position)
         holder.tvName.text = gList.name
         holder.tvCount.text = gList.quantity.toString()
         holder.view.setOnLongClickListener {
@@ -47,30 +36,17 @@ class ShopListAdapter:RecyclerView.Adapter<ShopListAdapter.shopItemViewHolder>()
             onClickListener?.invoke(gList)
             true
         }
-        
-        //holder.view.
-    }
 
-    override fun onViewRecycled(holder: shopItemViewHolder) {
-        super.onViewRecycled(holder)
     }
-
-    override fun getItemCount(): Int = myList.size
 
     override fun getItemViewType(position: Int): Int {
-        val element = myList[position]
+        val element = getItem(position)
         return if (element.active){
             ELEMENT_ENABLED
         } else {
             ELEMENT_DISABLE
         }
     }
-
-    class shopItemViewHolder(val view: View):RecyclerView.ViewHolder(view) {
-        val tvName = view.findViewById<TextView>(R.id.tv_name)
-        val tvCount = view.findViewById<TextView>(R.id.tv_count)
-    }
-
 
     companion object{
         const val ELEMENT_ENABLED = 1
