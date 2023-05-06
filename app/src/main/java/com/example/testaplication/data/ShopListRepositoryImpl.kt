@@ -2,10 +2,10 @@ package com.example.testaplication.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testaplication.domain.ShopList
-import com.example.testaplication.domain.ShopListRepositiry
+import com.example.testaplication.domain.ShopListRepository
 import kotlin.random.Random
 
-object ShopListRepositoryImpl: ShopListRepositiry {
+object ShopListRepositoryImpl: ShopListRepository {
 
     private val shopListItemLD = MutableLiveData<List<ShopList>>()
     private val shopListItem = sortedSetOf<ShopList>({o1,o2 -> o1.id.compareTo(o2.id)})
