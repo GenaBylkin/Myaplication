@@ -1,5 +1,6 @@
 package com.example.testaplication.presenstation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -7,24 +8,34 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testaplication.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel:MainViewModel
+    private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
+    private lateinit var shopItemView: ShopItemViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.shopList.observe(this){
+        viewModel.shopList.observe(this) {
             shopListAdapter.submitList(it)
+
         }
+        val buttonAddNewItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
+        buttonAddNewItem.setOnClickListener {
+            val intent = ShopItemActivity.newIntentItemAdd(this)
+            startActivity(intent)
+        }
+
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
         val rvShop = findViewById<RecyclerView>(R.id.rv_shop_list)
-        with(rvShop){
+        with(rvShop) {
             shopListAdapter = ShopListAdapter()
             adapter = shopListAdapter
             recycledViewPool.setMaxRecycledViews(
@@ -34,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             recycledViewPool.setMaxRecycledViews(
                 ShopListAdapter.ELEMENT_DISABLE,
                 ShopListAdapter.MAX_POOL_VIEW
-            )}
+            )
+        }
 
         setupLongClick()
 
@@ -43,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         setupSwipe(rvShop)
     }
 
-    private fun setupSwipe(rvShop:RecyclerView) {
+    private fun setupSwipe(rvShop: RecyclerView) {
         val collBack = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -69,6 +81,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupClick() {
         shopListAdapter.onClickListener = {
             Log.d("onClickListener", "This shop item: ${it.name}, ${it.quantity} ")
+            val intent = ShopItemActivity.editIntentItem(this, it.id)
+            startActivity(intent)
         }
     }
 
