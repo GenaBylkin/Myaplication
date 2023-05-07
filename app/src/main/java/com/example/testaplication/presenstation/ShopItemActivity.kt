@@ -3,19 +3,13 @@ package com.example.testaplication.presenstation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.testaplication.R
 import com.example.testaplication.domain.ShopList
-import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemActivity: AppCompatActivity() {
 
-//    private lateinit var viewModel: ShopItemViewModel
+    //    private lateinit var viewModel: ShopItemViewModel
 //
 //    private lateinit var tilName: TextInputLayout
 //    private lateinit var tilCount: TextInputLayout
@@ -23,17 +17,17 @@ class ShopItemActivity: AppCompatActivity() {
 //    private lateinit var etCount: EditText
 //    private lateinit var button: Button
 //
-//    private var screenMode = SCREEN_MODE_UNKNOWN
-//    private var shopItemId = ShopList.UNDEFINED_ID
+    private var screenMode = SCREEN_MODE_UNKNOWN
+    private var shopItemId = ShopList.UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
-//        parseIntent()
+        parseIntent()
 //        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
 //        initViews()
 //        editTextListeners()
-//        launchMode()
+        launchMode()
 //        observeViewModel()
     }
 
@@ -59,9 +53,9 @@ class ShopItemActivity: AppCompatActivity() {
         }
 
     }
-}
 
-//    private fun initViews() {
+
+    //    private fun initViews() {
 //        tilName = findViewById(R.id.til_name)
 //        tilCount = findViewById(R.id.til_count)
 //        etName = findViewById(R.id.et_name)
@@ -69,25 +63,26 @@ class ShopItemActivity: AppCompatActivity() {
 //        button = findViewById(R.id.save_button)
 //    }
 //
-//    private fun parseIntent() {
-//        if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
-//            throw RuntimeException("Param screen mode is absent")
-//        }
-//
-//        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
-//        if (mode != MODE_ADD && mode != MODE_EDIT) {
-//            throw RuntimeException("Unknown screen mode $mode")
-//        }
-//
-//        screenMode = mode
-//        if (screenMode == MODE_EDIT) {
-//            if (!intent.hasExtra(EXTRA_SHOP_ITEM_ID)) {
-//                throw RuntimeException("Param shop item id unknown")
-//            }
-//            shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopList.UNDEFINED_ID)
-//        }
-//    }
-//
+    private fun parseIntent() {
+        if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
+            throw RuntimeException("Param screen mode is absent")
+        }
+
+        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
+        if (mode != MODE_ADD && mode != MODE_EDIT) {
+            throw RuntimeException("Unknown screen mode $mode")
+        }
+
+        screenMode = mode
+        if (screenMode == MODE_EDIT) {
+            if (!intent.hasExtra(EXTRA_SHOP_ITEM_ID)) {
+                throw RuntimeException("Param shop item id unknown")
+            }
+            shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopList.UNDEFINED_ID)
+        }
+    }
+
+    //
 //    private fun editItem(){
 //        viewModel.getShopList(shopItemId)
 //        viewModel.itemShopList.observe(this) {
@@ -131,13 +126,17 @@ class ShopItemActivity: AppCompatActivity() {
 //        })
 //    }
 //
-//    private fun launchMode(){
-//        when (screenMode) {
-//            MODE_EDIT -> editItem()
-//            MODE_ADD -> addItem()
-//            else -> throw RuntimeException("Unknown this screen mode: $screenMode")
-//        }
-//    }
+    private fun launchMode() {
+        val fragment = when (screenMode) {
+            MODE_EDIT -> ShopItemFragment.newInstanceModEdit(shopItemId)
+            MODE_ADD -> ShopItemFragment.newInstanceModAdd()
+            else -> throw RuntimeException("Unknown this screen mode: $screenMode")
+        }
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.shop_item_container,fragment)
+            .commit()
+    }
 //
 //    private fun observeViewModel() {
 //        viewModel.errorInputCount.observe(this){
@@ -162,4 +161,4 @@ class ShopItemActivity: AppCompatActivity() {
 //        }
 //    }
 //}
-
+}
